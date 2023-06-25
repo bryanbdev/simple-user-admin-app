@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <div class="navbar-container"><%- include('../partials/header') %></div>
+    <div class="register-container">
+      <form>
+        <div class="username error"></div>
+        <input type="text" name="username" placeholder="username" />
+        <div class="email error"></div>
+        <input type="text" name="email" placeholder="email" />
+        <div class="password error"></div>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          placeholder="password"
+        />
+        <button type="submit">Create Account</button>
+      </form>
+    </div>
+    <script>
+      // target elements
+      const form = document.querySelector("form");
+      const usernameErr = document.querySelector(".username.error");
+      const emailErr = document.querySelector(".email.error");
+      const passwordErr = document.querySelector(".password.error");
+
+      form.addEventListener("submit", handle_register_user_form);
+
+      // handle form register
+      async function handle_register_user_form(e) {
+        e.preventDefault();
+        const username = form.username.value;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        usernameErr.textContent = "";
+        emailErr.textContent = "";
+        passwordErr.textContent = "";
+
+        try {
+          const res = await fetch("/api/auth/register", {
+            method: "POST",
+            body: JSON.stringify({ username, email, password }),
+            headers: { "Content-Type": "application/json" },
+          });
+
+          // ONLY WILL SEE THIS IF --> server side returns res.json() on post method
+          const data = await res.json();
+          console.log(data);
+
+          // show user error
+          if (data.errors) {
+            usernameErr.textContent = data.errors.username;
+            emailErr.textContent = data.errors.email;
+            passwordErr.textContent = data.errors.password;
+          }
+        } catch (error) {
+          console.log("Request failed: " + error.message);
+        }
+      }
+    </script>
+    <footer><%- include('../partials/footer') %></footer>
+  </body>
+</html>
