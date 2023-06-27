@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <div class="navbar-container"><%- include('../partials/header') %></div>
+    <div class="dashboard-container">
+      <h1>Dashboard</h1>
+      <p>Welcome, <%= user.username %></p>
+    </div>
+    <button><a href="/api/user/logout">Logout</a></button>
+    <footer><%- include('../partials/footer') %></footer>
+  </body>
+</html>

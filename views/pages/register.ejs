@@ -58,6 +58,10 @@
             emailErr.textContent = data.errors.email;
             passwordErr.textContent = data.errors.password;
           }
+          // check if user exists if so then redirect
+          if (data.user) {
+            location.assign("/api/auth/login");
+          }
         } catch (error) {
           console.log("Request failed: " + error.message);
         }

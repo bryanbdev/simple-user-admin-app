@@ -46,6 +46,23 @@ UserSchema.post("save", function (doc, next) {
   next();
 });
 
+// create method on UserSchema that will log user in
+UserSchema.statics.login = async function (email, password) {
+  // find user with matching email
+  const user = await this.findOne({ email });
+  if (user) {
+    // compare user typed in password vs hash pasword in database
+    const isAuth = await bcrypt.compare(password, user.password);
+    if (isAuth) {
+      return user;
+    }
+    // throw error if password does not match with password in database
+    throw Error("incorrect password");
+  }
+  // throw error if email does not exists in database
+  throw Error("incorrect email");
+};
+
 const UserModel = mongoose.model("Users", UserSchema);
 
 export default UserModel;
