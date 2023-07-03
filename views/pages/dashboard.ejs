@@ -6,8 +6,24 @@
   <body>
     <div class="navbar-container"><%- include('../partials/header') %></div>
     <div class="dashboard-container">
+      <% let accType; %>
       <h1>Dashboard</h1>
       <p>Welcome, <%= user.username %></p>
+      <p>
+        Account Type: <%= user.isAdmin ? accType = "Admin" : accType="Reg" %>
+      </p>
+      <div>
+        <h4>List Of Users</h4>
+        <% users.map(user => { %>
+        <p><%= user.email %></p>
+
+        <% if(accType === "Admin") {%>
+
+        <button>Edit</button>
+        <button>Delete</button>
+
+        <% }%> <% }) %>
+      </div>
     </div>
     <button><a href="/api/user/logout">Logout</a></button>
     <footer><%- include('../partials/footer') %></footer>

@@ -18,8 +18,21 @@
           name="password"
           placeholder="password"
         />
+        <div>
+          Is Admin?
+          <input
+            type="checkbox"
+            name="adminCheckbox"
+            id="checkbox"
+            value="false"
+          />
+        </div>
         <button type="submit">Create Account</button>
       </form>
+      <p>
+        Already have an account?
+        <span><a href="/api/auth/login">Log in</a></span>
+      </p>
     </div>
     <script>
       // target elements
@@ -27,6 +40,20 @@
       const usernameErr = document.querySelector(".username.error");
       const emailErr = document.querySelector(".email.error");
       const passwordErr = document.querySelector(".password.error");
+      const checkbox = form.adminCheckbox;
+
+      let isAdmin;
+
+      checkbox.addEventListener("click", (e) => {
+        isAdmin = e.target.checked;
+        if (isAdmin) {
+          form.adminCheckbox.value = "true";
+          console.log("box is checked");
+        } else {
+          form.adminCheckbox.value = "false";
+          console.log("box is unchecked");
+        }
+      });
 
       form.addEventListener("submit", handle_register_user_form);
 
@@ -37,6 +64,8 @@
         const email = form.email.value;
         const password = form.password.value;
 
+        console.log(form.adminCheckbox.value);
+
         usernameErr.textContent = "";
         emailErr.textContent = "";
         passwordErr.textContent = "";
@@ -44,7 +73,7 @@
         try {
           const res = await fetch("/api/auth/register", {
             method: "POST",
-            body: JSON.stringify({ username, email, password }),
+            body: JSON.stringify({ username, email, password, isAdmin }),
             headers: { "Content-Type": "application/json" },
           });
 
