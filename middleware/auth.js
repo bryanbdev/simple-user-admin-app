@@ -31,6 +31,7 @@ export const requireAuth = (req, res, next) => {
 };
 
 // create a middleware to check if valid user exists in the cookie we created
+// allow us to get the current user information
 export const doUserExist = async (req, res, next) => {
   // get token from cookies
   const token = req.cookies.jwt;
