@@ -27,13 +27,13 @@
         <!-- if the current user id matches the user id in the database show buttons for that specific user -->
         <% } else if (currentUserID == user.id) { %>
 
-        <button>Edit</button>
+        <button><a href="/api/user/edit">Edit</a></button>
         <button>Delete</button>
 
         <% } else { %> <% return %> <% } %> <% }) %>
       </div>
     </div>
-    <button><a href="/api/user/edit">Edit Account</a></button>
+
     <button><a href="/api/user/logout">Logout</a></button>
     <footer><%- include('../partials/footer') %></footer>
   </body>

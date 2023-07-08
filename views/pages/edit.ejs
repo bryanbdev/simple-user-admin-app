@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("../partials/head") %>
+  </head>
+  <body>
+    <div><%- include("../partials/head") %></div>
+    <form>
+      <div class="username error"></div>
+      <input
+        type="text"
+        name="username"
+        placeholder="username"
+        value="<%= user.username %>"
+      />
+      <div class="email error"></div>
+      <input
+        type="text"
+        name="email"
+        placeholder="email"
+        value="<%= user.email %>"
+      />
+      <div class="password error"></div>
+      <input
+        id="password"
+        type="password"
+        name="password"
+        placeholder="password"
+      />
+      <div>
+        Is Admin?
+        <input
+          type="checkbox"
+          name="adminCheckbox"
+          id="checkbox"
+          value="false"
+        />
+      </div>
+      <button name="submit" type="submit">Update</button>
+    </form>
+    <button class="cancel-update-btn">Cancel</button>
+
+    <script>
+      const form = document.querySelector("form");
+      const cancelBtn = document.querySelector(".cancel-update-btn");
+      const usernameErr = document.querySelector(".username.error");
+      const emailErr = document.querySelector(".email.error");
+      const passwordErr = document.querySelector(".password.error");
+
+      // goes back to previous page
+      cancelBtn.addEventListener("click", () => {
+        window.history.back();
+      });
+
+      // add event listener to form
+      form.addEventListener("submit", updateUserInfo);
+
+      // handle form submission to update
+      async function updateUserInfo(e) {
+        e.preventDefault();
+        // get form input values from each field
+        const username = form.username.value;
+        const email = form.email.value;
+        const password = form.password.value;
+
+        // url making request to
+        const url = "/api/user/edit";
+
+        // set errors to empty string
+        usernameErr.textContent = "";
+        emailErr.textContent = "";
+        passwordErr.textContent = "";
+
+        try {
+          const res = await fetch(url, {
+            method: "PUT",
+            body: JSON.stringify({ username, email, password }),
+            headers: { "Content-Type": "application/json" },
+          });
+
+          // requested form data
+          const data = await res.json();
+          console.log(data);
+
+          // show user error
+          if (data.errors) {
+            usernameErr.textContent = data.errors.username;
+            emailErr.textContent = data.errors.email;
+            passwordErr.textContent = data.errors.password;
+          }
+          // check if user exists if so then redirect
+          if (data.user) {
+            // location.assign("/api/user/dashboard"); //redirect to dashboard
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    </script>
+
+    <%- include("../partials/footer") %>
+  </body>
+</html>
