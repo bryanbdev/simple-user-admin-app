@@ -34,6 +34,7 @@
           name="adminCheckbox"
           id="checkbox"
           value="false"
+          checked="<%=user.isChecked%>"
         />
       </div>
       <button name="submit" type="submit">Update</button>
@@ -46,6 +47,7 @@
       const usernameErr = document.querySelector(".username.error");
       const emailErr = document.querySelector(".email.error");
       const passwordErr = document.querySelector(".password.error");
+      const checkbox = form.checkbox;
 
       // goes back to previous page
       cancelBtn.addEventListener("click", () => {
@@ -55,6 +57,21 @@
       // add event listener to form
       form.addEventListener("submit", updateUserInfo);
 
+      // check to see if user is admin
+      let isAdmin;
+      checkbox.addEventListener("click", (e) => {
+        console.log(e);
+        isAdmin = e.target.checked;
+        if (isAdmin) {
+          e.target.value = true;
+          console.log(e.target.value);
+        } else {
+          e.target.value = false;
+          console.log(e.target.value);
+        }
+        return isAdmin;
+      });
+
       // handle form submission to update
       async function updateUserInfo(e) {
         e.preventDefault();
@@ -62,6 +79,8 @@
         const username = form.username.value;
         const email = form.email.value;
         const password = form.password.value;
+
+        console.log(isAdmin);
 
         // url making request to
         const url = "/api/user/edit";
@@ -74,7 +93,7 @@
         try {
           const res = await fetch(url, {
             method: "PUT",
-            body: JSON.stringify({ username, email, password }),
+            body: JSON.stringify({ username, email, password, isAdmin }),
             headers: { "Content-Type": "application/json" },
           });
 
@@ -90,7 +109,7 @@
           }
           // check if user exists if so then redirect
           if (data.user) {
-            // location.assign("/api/user/dashboard"); //redirect to dashboard
+            location.assign("/api/user/dashboard"); //redirect to dashboard
           }
         } catch (error) {
           console.log(error);
